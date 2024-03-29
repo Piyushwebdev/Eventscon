@@ -52,7 +52,8 @@ router.post('/create-checkout-session', async (req, res) => {
                     userId: userId
                 }
             },
-            $inc: { purchasedCount: 1 }
+            $inc: { purchasedCount: 1 },
+            $set: { lastUpdated: new Date() } // Update lastUpdated field
         });
 
         res.json({ id: session.id });

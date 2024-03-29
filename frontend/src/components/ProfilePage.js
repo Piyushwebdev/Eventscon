@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Grid, Pagination, Tabs, Tab } from "@mui/material";
+import { Box,Container, Grid, Pagination, Tabs, Tab } from "@mui/material";
 import CourseCard from "./CourseCard"; // Assuming you have a CourseCard component
 import EventCard from "./EventCard";
 import ButtonAppBar from "./ButtonAppBar";
@@ -12,21 +12,21 @@ const ProfilePage = () => {
   const [pageSize] = useState(4); // 6 cards per page
   const [selectedTab, setSelectedTab] = useState("courses"); // Default selected tab is courses
 
-  useEffect(() => {
-    // Fetch courses data from API
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_PRODUCTION_URL}/api/courses?page=${page}&pageSize=${pageSize}`
-        );
-        setRegisteredCourses(response.data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
+  // useEffect(() => {
+  //   // Fetch courses data from API
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${process.env.REACT_APP_LOCALHOST_URL}/api/courses?page=${page}&pageSize=${pageSize}`
+  //       );
+  //       setRegisteredCourses(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching courses:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [page, pageSize]);
+  //   fetchData();
+  // }, [page, pageSize]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -36,7 +36,7 @@ const ProfilePage = () => {
   };
   useEffect(() => {
     // Fetch purchased courses
-    axios.get(`${process.env.REACT_APP_PRODUCTION_URL}/api/profile/purchased-courses`, {
+    axios.get(`${process.env.REACT_APP_LOCALHOST_URL}/api/profile/purchased-courses`, {
       headers: {
         'x-auth-token': localStorage.getItem('token') // Assuming token is stored in localStorage
       }
@@ -49,13 +49,14 @@ const ProfilePage = () => {
     });
 
     // Fetch registered events
-    axios.get(`${process.env.REACT_APP_PRODUCTION_URL}/api/profile/registered-events`, {
+    axios.get(`${process.env.REACT_APP_LOCALHOST_URL}/api/profile/registered-events`, {
       headers: {
         'x-auth-token': localStorage.getItem('token') // Assuming token is stored in localStorage
       }
     })
     .then(response => {
-      setRegisteredEvents(response.data);
+      setRegisteredEvents(response?.data);
+      console.log(response)
     })
     .catch(error => {
       console.error('Error fetching registered events:', error);
@@ -71,21 +72,28 @@ const ProfilePage = () => {
       </Tabs>
       <Container>
       {selectedTab === "courses" ? (
+        <Box>
+        {registeredCourses.length<1?<h3>No courses are purchased</h3>:""}
         <Grid container spacing={3}>
           {registeredCourses.map((course) => (
             <Grid key={course.id} item xs={12} sm={6} md={4} lg={3}>
-              <CourseCard course={course} />
+              <CourseCard course={course.courseId} hide="true"/>
             </Grid>
           ))}
         </Grid>
+        </Box>
         ):
-        <Grid container spacing={3}>
+        <Box>
+          {registeredEvents.length<1?<h3>No events are registered</h3>:""}
+          <Grid container spacing={3}>
         {registeredEvents.map((event) => (
           <Grid key={event.id} item xs={12} sm={6} md={4} lg={3}>
-            <EventCard event={event} />
+            <EventCard event={event.eventId} hide="true"/>
           </Grid>
         ))}
       </Grid>
+        </Box>
+        
         }
         <Pagination
           count={3} // Assuming there are 10 pages, you should replace this with the actual count

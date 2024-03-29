@@ -14,7 +14,7 @@ import axios from "axios";
 import GroupIcon from "@mui/icons-material/Group";
 const stripePromise = loadStripe(process.env.REACT_APP_COURSE_STRIPE_KEY);
 
-const CourseCard = ({ course, userId }) => {
+const CourseCard = ({ course, userId ,hide}) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCoursePurchased, setIsCoursePurchased] = useState(false);
 
@@ -22,7 +22,7 @@ const CourseCard = ({ course, userId }) => {
     const checkCoursePurchased = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_PRODUCTION_URL}/api/auth/${userId}`
+          `${process.env.REACT_APP_LOCALHOST_URL}/api/auth/${userId}`
         );
         if (response.status === 200) {
           const userData = response.data;
@@ -52,8 +52,9 @@ const CourseCard = ({ course, userId }) => {
     try {
       const stripe = await stripePromise;
       const courseId = course?._id;
+      console.log(courseId,userId)
       const response = await axios.post(
-        `${process.env.REACT_APP_PRODUCTION_URL}/api/courses/create-checkout-session`,
+        `${process.env.REACT_APP_LOCALHOST_URL}/api/courses/create-checkout-session`,
         {
           courseId,
           userId,
@@ -123,7 +124,7 @@ const CourseCard = ({ course, userId }) => {
               bottom: "20px",
               left: "16px",
               right: "16px",
-              display: "flex",
+              display: hide?"none":"flex",
               justifyContent: "space-between",
               alignItems: "center",
             }}

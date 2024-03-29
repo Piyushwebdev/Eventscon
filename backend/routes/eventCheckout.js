@@ -34,7 +34,7 @@ router.post('/create-checkout-session', async (req, res) => {
         });
 
         // Update the user's schema with the details of the registered event
-        await User.findByIdAndUpdate(userId, {
+        const updatedUser = await User.findByIdAndUpdate(userId, {
             $push: {
                 eventsRegistered: {
                     eventId: event._id,
@@ -43,10 +43,10 @@ router.post('/create-checkout-session', async (req, res) => {
                 }
             }
         });
-        console.log('User updated with registered event');
+        console.log('User updated with registered event:', updatedUser);
 
         // Update the event document with registrant details and increase registeredCount
-        await Event.findByIdAndUpdate(eventId, {
+        const updatedEvent = await Event.findByIdAndUpdate(eventId, {
             $push: {
                 registeredBy: {
                     userId: userId
@@ -54,7 +54,7 @@ router.post('/create-checkout-session', async (req, res) => {
             },
             $inc: { registeredCount: 1 }
         });
-        console.log('Event updated with registrant details');
+        console.log('Event updated with registrant details:', updatedEvent);
 
         // Send the session ID to the client to redirect to the checkout page
         res.status(200).json({ sessionId: session.id });

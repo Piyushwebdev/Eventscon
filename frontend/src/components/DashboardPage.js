@@ -37,7 +37,7 @@ const DashboardPage = () => {
   };
   const fetchCourses = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_PRODUCTION_URL}/api/courses/`);
+      const response = await fetch(`${process.env.REACT_APP_LOCALHOST_URL}/api/courses/`);
       if (response.ok) {
         const data = await response.json();
         setCourses(data);
@@ -51,7 +51,7 @@ const DashboardPage = () => {
   };
   const fetchEvents = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_PRODUCTION_URL}/api/events/`);
+      const response = await fetch(`${process.env.REACT_APP_LOCALHOST_URL}/api/events/`);
       if (response.ok) {
         const data = await response.json();
         console.log(data);
@@ -66,7 +66,7 @@ const DashboardPage = () => {
   const fetchCourseStats = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_PRODUCTION_URL}/api/courses/sales/stats`
+        `${process.env.REACT_APP_LOCALHOST_URL}/api/courses/sales/stats`
       );
       if (response.ok) {
         const data = await response.json();
@@ -81,7 +81,7 @@ const DashboardPage = () => {
   const fetchEventStats = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_PRODUCTION_URL}/api/events/registration/stats`
+        `${process.env.REACT_APP_LOCALHOST_URL}/api/events/registration/stats`
       );
       if (response.ok) {
         const data = await response.json();
@@ -114,7 +114,7 @@ const DashboardPage = () => {
   const onEventDelete = async (eventId) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_PRODUCTION_URL}/api/events/${eventId}`,
+        `${process.env.REACT_APP_LOCALHOST_URL}/api/events/${eventId}`,
         {
           method: "DELETE",
         }
@@ -132,7 +132,7 @@ const DashboardPage = () => {
   const onCourseDelete = async (courseId) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_PRODUCTION_URL}/api/courses/${courseId}`,
+        `${process.env.REACT_APP_LOCALHOST_URL}/api/courses/${courseId}`,
         {
           method: "DELETE",
         }
@@ -175,9 +175,9 @@ const DashboardPage = () => {
       let method;
 
       if (selectedTab === "courses") {
-        url = `${process.env.REACT_APP_PRODUCTION_URL}/api/courses/`;
+        url = `${process.env.REACT_APP_LOCALHOST_URL}/api/courses/`;
       } else {
-        url = `${process.env.REACT_APP_PRODUCTION_URL}/api/events/`;
+        url = `${process.env.REACT_APP_LOCALHOST_URL}/api/events/`;
       }
 
       if (modalType === "edit") {

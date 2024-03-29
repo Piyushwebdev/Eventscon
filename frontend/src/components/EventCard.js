@@ -6,7 +6,7 @@ import GroupIcon from "@mui/icons-material/Group";
 
 const stripePromise = loadStripe(process.env.REACT_APP_EVENT_STRIPE_KEY);
 
-const EventCard = ({ event, userId }) => {
+const EventCard = ({ event, userId,hide }) => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isEventRegistered, setIsEventRegistered] = useState(false);
 
@@ -14,7 +14,7 @@ const EventCard = ({ event, userId }) => {
         // Check if the user has already registered for the event
         const checkEventRegistration = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_PRODUCTION_URL}/api/auth/${userId}`);
+                const response = await axios.get(`${process.env.REACT_APP_LOCALHOST_URL}/api/auth/${userId}`);
                 if (response.status === 200) {
                     const userData = response.data;
                     const registeredEventsIds = userData?.eventsRegistered?.map(e => e.eventId);
@@ -38,7 +38,9 @@ const EventCard = ({ event, userId }) => {
         try {
             const stripe = await stripePromise;
             const eventId = event?._id;
-            const response = await axios.post(`${process.env.REACT_APP_PRODUCTION_URL}/api/events/create-checkout-session`, {
+            console.log(eventId,userId)
+
+            const response = await axios.post(`${process.env.REACT_APP_LOCALHOST_URL}/api/events/create-checkout-session`, {
                 eventId,
                 userId,
             });
@@ -88,7 +90,7 @@ const EventCard = ({ event, userId }) => {
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            <Box sx={{ position: 'absolute', bottom: '20px', left: '16px', right: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{position: 'absolute', bottom: '20px', left: '16px', right: '16px', display:hide?"none":  'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="subtitle1" color="text.primary">
                     Price: ${event.eventPrice}
                 </Typography>
